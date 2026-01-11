@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Omega Aesthetics */
+body {
+  background-color: #f5f5f5; /* Light grey background for premium feel */
+  color: #1a1a1a;
+}
