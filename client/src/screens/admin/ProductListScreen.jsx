@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
-import { useGetProductsQuery, useCreateProductMutation, useDeleteProductMutation } from '../store/productsApiSlice';
+import { useGetProductsQuery, useCreateProductMutation, useDeleteProductMutation } from '../../store/productsApiSlice';
 
 const ProductListScreen = () => {
     const { data: products, isLoading, error, refetch } = useGetProductsQuery();

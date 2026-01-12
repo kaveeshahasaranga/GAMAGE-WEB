@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../store/usersApiSlice';
 import { setCredentials } from '../store/authSlice';
@@ -14,11 +14,15 @@ const LoginScreen = () => {
     const [login, { isLoading }] = useLoginMutation();
     const { userInfo } = useSelector((state) => state.auth);
 
+    const { search } = useLocation();
+    const sp = new URLSearchParams(search);
+    const redirect = sp.get('redirect') || '/';
+
     useEffect(() => {
         if (userInfo) {
-            navigate('/');
+            navigate(redirect);
         }
-    }, [navigate, userInfo]);
+    }, [navigate, redirect, userInfo]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
