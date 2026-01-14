@@ -35,8 +35,7 @@ const updateImages = async () => {
             const product = products[i];
             const randomImage = watchImages[i % watchImages.length];
 
-            product.image = randomImage;
-            await product.save();
+            await Product.updateOne({ _id: product._id }, { $set: { image: randomImage } });
             console.log(`Updated image for: ${product.name}`);
         }
 
