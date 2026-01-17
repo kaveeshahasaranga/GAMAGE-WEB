@@ -76,13 +76,44 @@ const Header = () => {
                                         </Link>
 
                                         {userInfo.isAdmin && (
-                                            <Link
-                                                to="/admin/productlist"
-                                                className="block px-4 py-2 hover:bg-gray-50 hover:text-omega-red transition flex items-center gap-2"
-                                                onClick={() => setIsProfileDropdownOpen(false)}
-                                            >
-                                                <span className="w-4 h-4 rounded-full bg-omega-gold flex items-center justify-center text-[10px] text-white">A</span> Admin
-                                            </Link>
+                                            <>
+                                                <Link
+                                                    to='/admin/productlist'
+                                                    className='block px-4 py-2 hover:bg-gray-50 hover:text-omega-red transition flex items-center gap-2'
+                                                    onClick={() =>
+                                                        setIsProfileDropdownOpen(false)
+                                                    }
+                                                >
+                                                    <span className='w-4 h-4 rounded-full bg-omega-gold flex items-center justify-center text-[10px] text-white'>
+                                                        P
+                                                    </span>{' '}
+                                                    Products
+                                                </Link>
+                                                <Link
+                                                    to='/admin/userlist'
+                                                    className='block px-4 py-2 hover:bg-gray-50 hover:text-omega-red transition flex items-center gap-2'
+                                                    onClick={() =>
+                                                        setIsProfileDropdownOpen(false)
+                                                    }
+                                                >
+                                                    <span className='w-4 h-4 rounded-full bg-omega-gold flex items-center justify-center text-[10px] text-white'>
+                                                        U
+                                                    </span>{' '}
+                                                    Users
+                                                </Link>
+                                                <Link
+                                                    to='/admin/orderlist'
+                                                    className='block px-4 py-2 hover:bg-gray-50 hover:text-omega-red transition flex items-center gap-2'
+                                                    onClick={() =>
+                                                        setIsProfileDropdownOpen(false)
+                                                    }
+                                                >
+                                                    <span className='w-4 h-4 rounded-full bg-omega-gold flex items-center justify-center text-[10px] text-white'>
+                                                        O
+                                                    </span>{' '}
+                                                    Orders
+                                                </Link>
+                                            </>
                                         )}
 
                                         <button
@@ -133,7 +164,29 @@ const Header = () => {
                                     <div className="py-2 text-gray-400 text-xs uppercase font-bold tracking-wider">Account</div>
                                     <Link to="/profile" className="pl-4 text-white hover:text-omega-gold py-1" onClick={closeMobileMenu}>Profile</Link>
                                     {userInfo.isAdmin && (
-                                        <Link to="/admin/productlist" className="pl-4 text-omega-gold hover:text-white py-1" onClick={closeMobileMenu}>Admin Dashboard</Link>
+                                        <>
+                                            <Link
+                                                to='/admin/productlist'
+                                                className='pl-4 text-omega-gold hover:text-white py-1'
+                                                onClick={closeMobileMenu}
+                                            >
+                                                Products
+                                            </Link>
+                                            <Link
+                                                to='/admin/userlist'
+                                                className='pl-4 text-omega-gold hover:text-white py-1'
+                                                onClick={closeMobileMenu}
+                                            >
+                                                Users
+                                            </Link>
+                                            <Link
+                                                to='/admin/orderlist'
+                                                className='pl-4 text-omega-gold hover:text-white py-1'
+                                                onClick={closeMobileMenu}
+                                            >
+                                                Orders
+                                            </Link>
+                                        </>
                                     )}
                                     <button onClick={logoutHandler} className="text-left pl-4 text-white hover:text-omega-red py-1 flex items-center gap-2">
                                         Logout <FaSignOutAlt />
