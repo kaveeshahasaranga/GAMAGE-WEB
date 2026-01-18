@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../store/usersApiSlice';
 import { logout } from '../store/authSlice';
 import { FaShoppingCart, FaUser, FaSignOutAlt, FaBars, FaTimes, FaCaretDown } from 'react-icons/fa';
+import SearchBox from './SearchBox';
 
 const Header = () => {
     const { userInfo } = useSelector((state) => state.auth);
@@ -39,6 +40,11 @@ const Header = () => {
                             OMEGA
                         </span>
                     </Link>
+
+                    {/* Search */}
+                    <div className="hidden md:block">
+                        <SearchBox />
+                    </div>
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-8">

@@ -1,9 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useGetProductsQuery } from '../store/productsApiSlice';
 import Product from '../components/Product';
+import Paginate from '../components/Paginate';
 
 const HomeScreen = () => {
-    const { data: products, isLoading, error } = useGetProductsQuery();
+    const { pageNumber, keyword } = useParams();
+
+    const { data, isLoading, error } = useGetProductsQuery({
+        keyword,
+        pageNumber,
+    });
 
     return (
         <div className="bg-white">
@@ -110,14 +116,19 @@ const HomeScreen = () => {
                 ) : (
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {products.map((product) => (
+                            {data.products.map((product) => (
                                 <Product key={product._id} product={product} />
                             ))}
                         </div>
-                        {products.length === 0 && (
+                        <Paginate
+                            pages={data.pages}
+                            page={data.page}
+                            keyword={keyword ? keyword : ''}
+                        />
+                        {data.products.length === 0 && (
                             <div className="text-center py-20 bg-gray-50 rounded-lg">
-                                <p className="text-gray-500 text-lg mb-4">No products found in the catalog.</p>
-                                <p className="text-gray-400">Log in as Admin to add your first timepiece.</p>
+                                <p className="text-gray-500 text-lg mb-4">No products found for this search.</p>
+                                <p className="text-gray-400">Try a different keyword or browse our full collection.</p>
                             </div>
                         )}
                     </>
