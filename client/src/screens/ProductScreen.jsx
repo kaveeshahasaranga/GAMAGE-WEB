@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useGetProductDetailsQuery } from '../store/productsApiSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGetProductDetailsQuery, useCreateReviewMutation } from '../store/productsApiSlice';
 import { addToCart } from '../store/cartSlice';
 import Rating from '../components/Rating';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 import { FaShoppingCart, FaArrowLeft } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const ProductScreen = () => {
     const { id: productId } = useParams();
@@ -12,8 +15,31 @@ const ProductScreen = () => {
     const navigate = useNavigate();
 
     const [qty, setQty] = useState(1);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
 
-    const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
+    const { data: product, isLoading, refetch, error } = useGetProductDetailsQuery(productId);
+
+    const [createReview, { isLoading: loadingProductReview, error: reviewError }] = useCreateReviewMutation();
+
+    const { userInfo } = useSelector((state) => state.auth);
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        try {
+            await createReview({
+                productId,
+                rating,
+                comment,
+            }).unwrap();
+            refetch();
+            toast.success('Review Submitted');
+            setRating(0);
+            setComment('');
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
+        }
+    };
 
     const addToCartHandler = () => {
         dispatch(addToCart({ ...product, qty }));
@@ -84,8 +110,8 @@ const ProductScreen = () => {
                                 onClick={addToCartHandler}
                                 disabled={product.countInStock === 0}
                                 className={`w-full flex items-center justify-center gap-2 py-3 uppercase tracking-widest text-xs font-bold transition duration-300 ${product.countInStock === 0
-                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                        : 'bg-omega-dark text-white hover:bg-omega-gold'
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-omega-dark text-white hover:bg-omega-gold'
                                     }`}
                             >
                                 <FaShoppingCart /> Add to Cart
@@ -97,6 +123,66 @@ const ProductScreen = () => {
                     </div>
                 </div>
             )}
+            <div className="mt-20">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl font-serif font-bold mb-6">Reviews</h2>
+                    {product?.reviews.length === 0 && <Message>No Reviews</Message>}
+                    <div className="space-y-8">
+                        {product?.reviews.map((review) => (
+                            <div key={review._id} className="bg-white p-6 rounded shadow-sm border border-gray-100">
+                                <div className="flex justify-between items-center mb-2">
+                                    <strong className="font-bold">{review.name}</strong>
+                                    <span className="text-sm text-gray-500">{review.createdAt.substring(0, 10)}</span>
+                                </div>
+                                <Rating value={review.rating} />
+                                <p className="mt-4 text-gray-700">{review.comment}</p>
+                            </div>
+                        ))}
+                        <div className="mt-10 bg-gray-50 p-8 rounded-xl">
+                            <h2 className="text-xl font-bold mb-4">Write a Customer Review</h2>
+                            {loadingProductReview && <Loader />}
+                            {userInfo ? (
+                                <form onSubmit={submitHandler}>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2">Rating</label>
+                                        <select
+                                            className="w-full p-2 border rounded focus:outline-none focus:border-omega-gold"
+                                            value={rating}
+                                            onChange={(e) => setRating(Number(e.target.value))}
+                                        >
+                                            <option value="">Select...</option>
+                                            <option value="1">1 - Poor</option>
+                                            <option value="2">2 - Fair</option>
+                                            <option value="3">3 - Good</option>
+                                            <option value="4">4 - Very Good</option>
+                                            <option value="5">5 - Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2">Comment</label>
+                                        <textarea
+                                            className="w-full p-2 border rounded h-32 focus:outline-none focus:border-omega-gold"
+                                            value={comment}
+                                            onChange={(e) => setComment(e.target.value)}
+                                        ></textarea>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={loadingProductReview}
+                                        className="bg-omega-dark text-white px-6 py-2 rounded hover:bg-black transition"
+                                    >
+                                        Submit
+                                    </button>
+                                </form>
+                            ) : (
+                                <Message>
+                                    Please <Link to="/login" className="font-bold underline">sign in</Link> to write a review
+                                </Message>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
