@@ -2,6 +2,8 @@ import { Link, useParams } from 'react-router-dom';
 import { useGetProductsQuery } from '../store/productsApiSlice';
 import Product from '../components/Product';
 import Paginate from '../components/Paginate';
+import ProductCarousel from '../components/ProductCarousel';
+import Meta from '../components/Meta';
 
 const HomeScreen = () => {
     const { pageNumber, keyword } = useParams();
@@ -13,6 +15,8 @@ const HomeScreen = () => {
 
     return (
         <div className="bg-white">
+            <Meta />
+            {!keyword ? <ProductCarousel /> : null}
             {/* HERO SECTION - Video Background */}
             <div className="relative h-screen w-full overflow-hidden mb-12">
                 <video
