@@ -96,22 +96,7 @@ const PlaceOrderScreen = () => {
                         <div className="flex justify-between mb-2">
                             <span>Items</span>
                             <span>${cart.itemsPrice}</span>
-                        </div>
-                        <div className="flex justify-between mb-2">
-                            <span>Shipping</span>
-                            <span>${cart.shippingPrice}</span>
-                        </div>
-                        <div className="flex justify-between mb-2">
-                            <span>Tax</span>
-                            <span>${cart.taxPrice}</span>
-                        </div>
-                        <div className="flex justify-between mb-6 pt-4 border-t border-gray-300">
-                            <span className="font-bold text-lg">Total</span>
-                            <span className="font-bold text-lg">${cart.totalPrice}</span>
-                        </div>
-
-                        {error && <div className="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded">{error?.data?.message || error.error}</div>}
-
+                       
                         <button
                             type="button"
                             disabled={cart.cartItems.length === 0 || isLoading}
